@@ -10,26 +10,17 @@ public class PlantBed<T extends Plant> {
         return this.plants.size();
     }
     public SimpleList<T> getPlantsByColor(PlantColor color){
-        SimpleList<T> foundPlants = new SimpleListImpl<>();
-        for (T plant: plants) {
-            foundPlants = this.plants.filter(new SimpleFilter<T>() {
-                @Override
-                public boolean include(T item) {
-                    return item.getColor().equals(color);
-                }
-            });
-        }
-        return foundPlants;
+        // filter interface is functional: has only one method: include().
+        // lambda overrites include() and "sets" a functionality
+        // that value is then passed to filter(), which iterates through the SimpleList plants.
+        return plants.filter(p -> p.getColor().equals(color));
     }
 
-    public void remove(PlantColor color){
-        SimpleList<T> remainingPlants = new SimpleListImpl<>();
+    public SimpleList<T> getPlants(){
+        return plants.map(p -> p);
+    }
 
-        for(T plant: plants){
-            if(!plant.getColor().equals(color)){
-                remainingPlants.add(plant);
-            }
-        }
-        plants = remainingPlants;
+    public void remove(T p){
+        plants = plants.filter(o -> !o.equals(p));
     }
 }
